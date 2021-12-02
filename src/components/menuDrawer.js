@@ -12,15 +12,20 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import ListIcon from '@mui/icons-material/List';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     left: false,
   });
 
+  const navigate = useNavigate();
+
   const atsijungti = () => {
+   
     console.log("atsijungiama");
+    navigate('/');
   };
 
   const toggleDrawer = (anchor, open) => (event) => {

@@ -1,31 +1,25 @@
 import "./App.css";
-import React, { useState } from "react";
+import React from "react";
 import MenuDrawer from "./components/menuDrawer";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
-import TableUsers from "./components/tableUsers";
-import { Button } from "@mui/material";
-import AddUserForm from "./components/addUserForm";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import SignIn from "./pages/SignIn";
+import Users from "./pages/Users";
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/books" element={<Books />} />
-        <Route exact path="/users" element={<Users />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
-  );
-}
+    <Routes>
+      <Route path="/" element={<SignIn />} />
+      <Route path="/users" element={<Users />} />
+      <Route path="/books" element={<Books />} />
+      <Route path= "*" element={<NotFound />}/>
 
-function Home() {
-  return (
-    <div>
-      <MenuDrawer />
-      <h2>Namų puslapis</h2>
-    </div>
+    </Routes>
+  </Router>
   );
 }
 
@@ -38,35 +32,10 @@ function Books() {
   );
 }
 
-function Users() {
-  const [addUserBox, setAddUserBox] = useState(false);
-
-  const handleAddUserBox = () => {
-    addUserBox ? setAddUserBox(false) : setAddUserBox(true);
-  };
-
-  return (
-    <div>
-      <MenuDrawer />
-      <h2>Vartotojai</h2>
-      <Button
-        onClick={handleAddUserBox}
-        className="addUser-btn"
-        variant="contained"
-      >
-        Pridėti vartotoją
-      </Button>
-      <TableUsers></TableUsers>
-      {addUserBox ? <AddUserForm handleChange={handleAddUserBox} ></AddUserForm> : null}
-    </div>
-  );
-}
-
 function NotFound() {
   return (
     <div>
-      <MenuDrawer />
-      <h2>Nerasta</h2>
+      <h2>404 klaida</h2>
     </div>
   );
 }
