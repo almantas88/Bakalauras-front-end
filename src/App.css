@@ -73,7 +73,7 @@ html, body{
 .userAddForm{
   margin: 100px auto;
   width: 600px;
-  height: 650px;
+  height: 680px;
   background-color: rgb(255, 255, 255);
   padding: 15px;
 }
@@ -87,9 +87,6 @@ html, body{
   z-index: 2;
 }
 
-.addUserForm{
-  margin-top: 120px;
-}
 
 .alert {
   width: 30%;
@@ -97,11 +94,12 @@ html, body{
   margin: 20px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 5;
 }
 
 .userName{
   color: white;
-  position: absolute;
+  position: fixed;
   margin-top: 27px;
   left: 50%;
   transform: translateX(-50%);

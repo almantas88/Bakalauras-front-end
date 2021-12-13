@@ -12,7 +12,7 @@ export default function TransitionAlerts(props) {
       <Collapse in={props.showError}>
         <Alert
           variant="filled"
-          severity="error"
+          severity={props.severity}
           action={
             <IconButton
               aria-label="close"

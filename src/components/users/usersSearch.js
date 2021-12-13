@@ -5,10 +5,10 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SearchIcon from "@mui/icons-material/Search";
-import TableMy from "./table";
+import UsersTable from "./usersTable";
 
 
-export default function StickyHeadTable(props) {
+export default function UsersSearch(props) {
 
   const [allRowsForShowing, setAllRowsForShowing] = useState(props.usersList);
   const [allRows, setAllRows] = useState(props.usersList);
@@ -83,9 +83,10 @@ export default function StickyHeadTable(props) {
               onChange={(event) => {
                 handleChangeCardId(event.target.value);
               }}
-              id="outlined-basic"
+
               label="Kortelės ID"
               variant="outlined"
+              autoComplete='disabled'
             />
           </Grid>
           <Grid item xs={3}>
@@ -95,9 +96,10 @@ export default function StickyHeadTable(props) {
               onChange={(event) => {
                 handleChangeFirstName(event.target.value);
               }}
-              id="outlined-basic"
+
               label="Vardas"
               variant="outlined"
+              autoComplete='disabled'
             />
           </Grid>
           <Grid item xs={3}>
@@ -107,9 +109,10 @@ export default function StickyHeadTable(props) {
               onChange={(event) => {
                 handleChangeLastName(event.target.value);
               }}
-              id="outlined-basic"
+
               label="Pavardė"
               variant="outlined"
+              autoComplete='disabled'
             />
           </Grid>
           <Grid item xs={1.3}>
@@ -117,6 +120,7 @@ export default function StickyHeadTable(props) {
               sx={{
                 height: "100%",
               }}
+              autoComplete='disabled'
               variant="contained"
               size="medium"
               startIcon={<SearchIcon />}
@@ -146,11 +150,12 @@ export default function StickyHeadTable(props) {
         </Grid>
       </Container>
 
-      <TableMy
+      <UsersTable
       ref={childRef}
         allRows={allRows}
         allRowsForShowing={allRowsForShowing}
         handleShowUserInfo={props.handleChange}
+        isLoading={props.isLoading}
       />
     </>
   );

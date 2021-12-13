@@ -1,8 +1,10 @@
 import axios from "axios";
 const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-export function register(data) {
-    return axios.post(`${apiUrl}/users/register`, data);
+export async function createNewUser(data) {
+
+    const response = await axios.post(`${apiUrl}/users/register`, data);
+    return response;
 }
 
 export async function getAllUsers() {

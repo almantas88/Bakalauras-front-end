@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import MenuDrawer from "../components/menuDrawer";
 import { Button } from "@mui/material";
-import TableUsers from "../components/tableUsers";
-import AddUserForm from "../components/myAddUserForm";
+import UsersSearch from "../components/users/usersSearch";
+import AddUserForm from "../components/users/addUserForm";
 import { getCurrentUser } from "../services/authServices";
 import { getAllUsers } from "../services/userServices";
 
 export default function Users() {
   const [user, setUser] = useState("");
   const [usersList, setUsersList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     returnAllUsers();
@@ -18,10 +19,8 @@ export default function Users() {
   async function getRole() {
     try {
       const user = await getCurrentUser();
-      //console.log(user);
       if (!user) window.location = "/unauthorized";
       if (user.role !== "ADMIN") {
-        //console.log(user.role);
         window.location = "/student";
       } else {
         setUser(user);
@@ -32,14 +31,15 @@ export default function Users() {
   }
 
   async function returnAllUsers() {
+    setIsLoading(true);
     try {
       const { data } = await getAllUsers();
-      //console.log(data.users);
       setUsersList(data.users);
-      //console.log(usersList);
     } catch (error) {
       console.log(error);
     }
+
+    setIsLoading(false);
   }
 
   const [showNewUserForm, setshowNewUserForm] = useState(false);
@@ -59,9 +59,9 @@ export default function Users() {
       >
         Pridėti vartotoją
       </Button>
-      <TableUsers usersList={usersList}></TableUsers>
+      <UsersSearch usersList={usersList} isLoading={isLoading}></UsersSearch>
       {showNewUserForm ? (
-        <AddUserForm handleChange={handleShowUserAddForm} />
+        <AddUserForm handleChange={handleShowUserAddForm} setUsersList={setUsersList} usersList={usersList} />
       ) : null}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, memo, forwardRef, useImperativeHandle  } from "react";
+import React, { useState, memo, forwardRef, useImperativeHandle } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,7 +8,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
-import InfoUserBox from "./infoUser";
+import InfoAboutUserBox from "./infoAboutUser";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const columns = [
   {
@@ -27,11 +29,10 @@ const columns = [
   },
 ];
 
-const TableMy = forwardRef((props, ref) => {
+const UsersTable = forwardRef((props, ref) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const [showNewUserForm, setshowNewUserForm] = useState(false);
   const [showUserInfo, setshowUserInfo] = useState(false);
   const [userInfo, setUserInfo] = useState({
     id: "",
@@ -39,13 +40,9 @@ const TableMy = forwardRef((props, ref) => {
     lastName: "",
   });
 
-  // The component instance will be extended
-  // with whatever you return from the callback passed
-  // as the second argument
   useImperativeHandle(ref, () => ({
     setToFirstPage,
   }));
-
 
   const handleChangePage = (event, newPage) => {
     console.log(props.allRowsForShowing);
@@ -66,16 +63,17 @@ const TableMy = forwardRef((props, ref) => {
     console.log(userInfo);
     showUserInfo ? setshowUserInfo(false) : setshowUserInfo(true);
   };
-  
-   const setToFirstPage = () => {
-       setPage(0);
-   }
 
- 
+  const setToFirstPage = () => {
+    setPage(0);
+  };
 
-  console.log("table render");
   return (
     <>
+      {props.isLoading ? (
+        <CircularProgress sx={{ display: "flex", margin: "150px auto" }} />
+      ) : 
+
       <Paper className="userTable" sx={{ width: "95%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -138,12 +136,15 @@ const TableMy = forwardRef((props, ref) => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+      </Paper> }
       {showUserInfo ? (
-        <InfoUserBox userInfo={userInfo} handleChange={handleShowUserInfo} />
+        <InfoAboutUserBox
+          userInfo={userInfo}
+          handleChange={handleShowUserInfo}
+        />
       ) : null}
     </>
   );
-})
+});
 
-export default memo(TableMy);
+export default memo(UsersTable);

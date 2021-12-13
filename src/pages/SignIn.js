@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,17 +13,25 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ImageLogo from "../public/images/be-fono-logo.png";
 import { login } from "../services/authServices";
 import FlashMessage from "../components/flashMessage";
+import { MessageContext } from "../context/messageContext";
 
 const theme = createTheme();
 
 export default function SignInSide() {
-  const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
+  const [
+    error,
+    setError,
+    showError,
+    setShowError,
+    severity,
+    setSeverity,
+    closeError,
+  ] = useContext(MessageContext);
 
-  const closeError = () => {
-    setError("");
-    setShowError(false);
-  };
+  // const closeError = () => {
+  //   setError("");
+  //   setShowError(false);
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -34,8 +42,19 @@ export default function SignInSide() {
   const doSubmit = async (email, password) => {
     try {
       await login({ email, password });
-      window.location = "/users";
+      setSeverity("success");
+      setError("Pavyko prisijungti");
+      setShowError(true);
+      
+      setTimeout(() => {
+        setShowError(false);
+        setError("");
+
+        window.location = "/users";
+      }, 500);
+      
     } catch (error) {
+      setSeverity("error");
       setError(error.response.data.msg);
       setShowError(true);
     }
@@ -43,7 +62,7 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      <FlashMessage msg={error} showError={showError} closeError={closeError} />
+      
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
