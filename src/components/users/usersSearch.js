@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef, useContext} from "react";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
@@ -6,12 +6,15 @@ import Grid from "@mui/material/Grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SearchIcon from "@mui/icons-material/Search";
 import UsersTable from "./usersTable";
+import { UsersContext } from "../../context/usersContext";
 
 
 export default function UsersSearch(props) {
 
+  const [allUserslist, setAllUsersList, handleDeleteUser] =
+  useContext(UsersContext);
+
   const [allRowsForShowing, setAllRowsForShowing] = useState(props.usersList);
-  const [allRows, setAllRows] = useState(props.usersList);
   const [searchTextFirstName, setSearchTextFirstName] = useState("");
   const [searchTextCardId, setSearchTextCardId] = useState("");
   const [searchTextLastName, setSearchTextLastName] = useState("");
@@ -19,7 +22,7 @@ export default function UsersSearch(props) {
   const childRef = useRef();
 
   const handleSearchButton = () => {
-    var filteredRows = allRows;
+    var filteredRows = allUserslist;
 
     
 
@@ -41,16 +44,15 @@ export default function UsersSearch(props) {
     console.log(filteredRows);
     setAllRowsForShowing(filteredRows);
     childRef.current.setToFirstPage()
-    //setPage(0);
+
   };
 
   const handleClearButton = () => {
     setSearchTextFirstName("");
     setSearchTextLastName("");
     setSearchTextCardId("");
-    setAllRowsForShowing(allRows);
+    setAllRowsForShowing(allUserslist);
     childRef.current.setToFirstPage()
-    //setPage(0);
   };
 
   const handleChangeFirstName = (text) => {
@@ -66,9 +68,9 @@ export default function UsersSearch(props) {
   };
 
   useEffect(() => {
-    setAllRows(props.usersList);
-    setAllRowsForShowing(props.usersList);
-  }, [props.usersList]);
+    setAllUsersList(allUserslist);
+    setAllRowsForShowing(allUserslist);
+  }, [allUserslist]);
 
 
   return (
@@ -152,7 +154,7 @@ export default function UsersSearch(props) {
 
       <UsersTable
       ref={childRef}
-        allRows={allRows}
+        allRows={allUserslist}
         allRowsForShowing={allRowsForShowing}
         handleShowUserInfo={props.handleChange}
         isLoading={props.isLoading}

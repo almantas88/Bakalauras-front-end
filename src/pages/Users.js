@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MenuDrawer from "../components/menuDrawer";
 import { Button } from "@mui/material";
 import UsersSearch from "../components/users/usersSearch";
 import AddUserForm from "../components/users/addUserForm";
 import { getCurrentUser } from "../services/authServices";
 import { getAllUsers } from "../services/userServices";
+import { UsersContext } from "../context/usersContext";
 
 export default function Users() {
-  const [user, setUser] = useState("");
-  const [usersList, setUsersList] = useState([]);
+  const [allUserslist, setAllUsersList, handleDeleteUser] =
+    useContext(UsersContext);
+
+  //const [usersList, setUsersList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showNewUserForm, setshowNewUserForm] = useState(false);
 
   useEffect(() => {
-    returnAllUsers();
+    allUserslist <= 0 && returnAllUsers();
     getRole();
   }, []);
 
@@ -22,8 +26,6 @@ export default function Users() {
       if (!user) window.location = "/unauthorized";
       if (user.role !== "ADMIN") {
         window.location = "/student";
-      } else {
-        setUser(user);
       }
     } catch (error) {
       window.location = "/unauthorized";
@@ -34,15 +36,14 @@ export default function Users() {
     setIsLoading(true);
     try {
       const { data } = await getAllUsers();
-      setUsersList(data.users);
+
+      setAllUsersList(data.users);
     } catch (error) {
       console.log(error);
     }
 
     setIsLoading(false);
   }
-
-  const [showNewUserForm, setshowNewUserForm] = useState(false);
 
   const handleShowUserAddForm = () => {
     showNewUserForm ? setshowNewUserForm(false) : setshowNewUserForm(true);
@@ -51,7 +52,7 @@ export default function Users() {
   return (
     <div>
       <MenuDrawer />
-      <h2>Vartotojai</h2>
+      <h1 className="centerHeader">Vartotojai</h1>
       <Button
         onClick={handleShowUserAddForm}
         className="addUser-btn"
@@ -59,9 +60,13 @@ export default function Users() {
       >
         Pridėti vartotoją
       </Button>
-      <UsersSearch usersList={usersList} isLoading={isLoading}></UsersSearch>
+      <UsersSearch usersList={allUserslist} isLoading={isLoading}></UsersSearch>
       {showNewUserForm ? (
-        <AddUserForm handleChange={handleShowUserAddForm} setUsersList={setUsersList} usersList={usersList} />
+        <AddUserForm
+          handleChange={handleShowUserAddForm}
+          setUsersList={setAllUsersList}
+          usersList={allUserslist}
+        />
       ) : null}
     </div>
   );
