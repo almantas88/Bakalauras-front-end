@@ -4,6 +4,7 @@ import MenuDrawer from "./components/menuDrawer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import Users from "./pages/Users";
+import Books from "./pages/Books";
 import FlashMessage from "./components/flashMessage";
 import { MessageProvider, MessageContext } from "./context/messageContext";
 
@@ -39,14 +40,7 @@ export default function App() {
   );
 }
 
-function Books() {
-  return (
-    <div>
-      <MenuDrawer />
-      <h2>Knygos</h2>
-    </div>
-  );
-}
+
 
 function NotFound() {
   return (

@@ -1,34 +1,34 @@
 import axios from "axios";
 const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+axios.interceptors.request.use((config) => {
+  config.headers.common["x-auth-token"] = `${localStorage.getItem("token")}`;
+  return config;
+});
+
 export async function createNewUser(data) {
   const response = await axios.post(`${apiUrl}/users/register`, data);
   return response;
 }
 
 export async function getAllUsers() {
-  const token = localStorage.getItem("token");
-  console.log(token);
-  const allUsers = await axios.get(`${apiUrl}/users/allUsers`, {
-    headers: { "X-Auth-Token": token },
-  });
+  const allUsers = await axios.get(`${apiUrl}/users/allUsers`);
   return allUsers;
 }
 
 export async function deleteUser(data) {
-  const token = localStorage.getItem("token");
   const deletedUser = await axios.delete(`${apiUrl}/users/deleteUser`, {
-    headers: { "X-Auth-Token": token },
-    data
+    data,
   });
   return deletedUser;
 }
 
 export async function getOneUser(data) {
-  const token = localStorage.getItem("token");
-  const foundUser = await axios.post(`${apiUrl}/users/oneUser`, {
-    headers: { "X-Auth-Token": token },
-    cardID: data
-  });
+  const foundUser = await axios.post(`${apiUrl}/users/oneUser`, data);
   return foundUser;
+}
+
+export async function updateOneUser(data) {
+  const updatingUser = await axios.put(`${apiUrl}/users/updateUser`, data);
+  return updatingUser;
 }

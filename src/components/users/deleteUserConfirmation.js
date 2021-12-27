@@ -22,8 +22,10 @@ export default function DeleteUser(props) {
 
   const handleDeleteUser = async () => {
     try {
-      console.log(props.userInfo.cardID);
-      const { data } = await deleteUser({ cardID: props.userInfo.cardID });
+      
+      const cardID = props.userInfo.cardID;
+      console.log({cardID});
+      const { data } = await deleteUser({cardID: props.userInfo.cardID});
       handleDeleteUserContext(props.userInfo.cardID);
       setSeverity("success");
       setError("Vartotojas buvo sėkmingai panaikintas!");

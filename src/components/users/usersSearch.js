@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext} from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
@@ -7,24 +7,97 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SearchIcon from "@mui/icons-material/Search";
 import UsersTable from "./usersTable";
 import { UsersContext } from "../../context/usersContext";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
+const grades = [
+  {
+    value: "1a",
+    label: "1a",
+  },
+  {
+    value: "1b",
+    label: "1b",
+  },
+  {
+    value: "1c",
+    label: "1c",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  {
+    value: "2a",
+    label: "2a",
+  },
+  
+];
 
 export default function UsersSearch(props) {
-
   const [allUserslist, setAllUsersList, handleDeleteUser] =
-  useContext(UsersContext);
+    useContext(UsersContext);
 
   const [allRowsForShowing, setAllRowsForShowing] = useState(props.usersList);
   const [searchTextFirstName, setSearchTextFirstName] = useState("");
   const [searchTextCardId, setSearchTextCardId] = useState("");
   const [searchTextLastName, setSearchTextLastName] = useState("");
+  const [grade, setGrade] = useState("");
+
+  const handleChange = (event) => {
+    setGrade(event.target.value);
+  };
 
   const childRef = useRef();
 
   const handleSearchButton = () => {
     var filteredRows = allUserslist;
-
-    
 
     filteredRows = filteredRows.filter((row) => {
       return row.cardID.toLowerCase().includes(searchTextCardId.toLowerCase());
@@ -41,18 +114,25 @@ export default function UsersSearch(props) {
         .toLowerCase()
         .includes(searchTextFirstName.toLowerCase());
     });
+
+    filteredRows = filteredRows.filter((row) => {
+      return row.grade
+        .toLowerCase()
+        .includes(grade.toLowerCase());
+    });
+
     console.log(filteredRows);
     setAllRowsForShowing(filteredRows);
-    childRef.current.setToFirstPage()
-
+    childRef.current.setToFirstPage();
   };
 
   const handleClearButton = () => {
     setSearchTextFirstName("");
     setSearchTextLastName("");
     setSearchTextCardId("");
+    setGrade('');
     setAllRowsForShowing(allUserslist);
-    childRef.current.setToFirstPage()
+    childRef.current.setToFirstPage();
   };
 
   const handleChangeFirstName = (text) => {
@@ -72,10 +152,9 @@ export default function UsersSearch(props) {
     setAllRowsForShowing(allUserslist);
   }, [allUserslist]);
 
-
   return (
     <>
-      <Container sx={{ overflow: "hidden" }}>
+      <Container sx={{ overflow: "hidden", width: "95%" }}>
         <h2>Paieška:</h2>
         <Grid container spacing={2}>
           <Grid item xs={3}>
@@ -85,10 +164,9 @@ export default function UsersSearch(props) {
               onChange={(event) => {
                 handleChangeCardId(event.target.value);
               }}
-
               label="Kortelės ID"
               variant="outlined"
-              autoComplete='disabled'
+              autoComplete="disabled"
             />
           </Grid>
           <Grid item xs={3}>
@@ -98,10 +176,9 @@ export default function UsersSearch(props) {
               onChange={(event) => {
                 handleChangeFirstName(event.target.value);
               }}
-
               label="Vardas"
               variant="outlined"
-              autoComplete='disabled'
+              autoComplete="disabled"
             />
           </Grid>
           <Grid item xs={3}>
@@ -111,20 +188,39 @@ export default function UsersSearch(props) {
               onChange={(event) => {
                 handleChangeLastName(event.target.value);
               }}
-
               label="Pavardė"
               variant="outlined"
-              autoComplete='disabled'
+              autoComplete="disabled"
             />
           </Grid>
-          <Grid item xs={1.3}>
+          <Grid item xs={3}>
+            <TextField
+            fullWidth
+              id="outlined-select-currency"
+              select
+              inputProps={{MenuProps: {disableScrollLock: true}}}
+              label="Klasė"
+              value={grade}
+              onChange={handleChange}
+            >
+              {grades.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} justifyContent="flex-end" sx ={{marginTop: 1}}>
+          <Grid alignItems={'right'} item xs={3}>
             <Button
               sx={{
                 height: "100%",
               }}
-              autoComplete='disabled'
+              fullWidth
+              autoComplete="disabled"
               variant="contained"
-              size="medium"
+              size="large"
               startIcon={<SearchIcon />}
               onClick={() => {
                 handleSearchButton();
@@ -134,13 +230,14 @@ export default function UsersSearch(props) {
             </Button>
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid item xs={3}>
             <Button
               sx={{
                 height: "100%",
               }}
               variant="contained"
-              size="medium"
+              size="large"
+              fullWidth
               startIcon={<DeleteOutlineIcon />}
               onClick={() => {
                 handleClearButton();
@@ -153,7 +250,7 @@ export default function UsersSearch(props) {
       </Container>
 
       <UsersTable
-      ref={childRef}
+        ref={childRef}
         allRows={allUserslist}
         allRowsForShowing={allRowsForShowing}
         handleShowUserInfo={props.handleChange}

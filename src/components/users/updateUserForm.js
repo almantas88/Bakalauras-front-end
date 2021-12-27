@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { MessageContext } from "../../context/messageContext";
-import { getOneUser } from "../../services/userServices";
+import { getOneUser, updateOneUser } from "../../services/userServices";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function UpdateUserForm(props) {
@@ -42,7 +42,7 @@ export default function UpdateUserForm(props) {
 
   const fetchUser = async (cardID) => {
     try {
-      const { data } = await getOneUser(cardID);
+      const { data } = await getOneUser({cardID});
       setValues({
         firstName: data.user.firstName,
         lastName: data.user.lastName,
@@ -60,6 +60,7 @@ export default function UpdateUserForm(props) {
   };
 
   useEffect(() => {
+    console.log(window.localStorage.getItem("token"));
     setIsLoading(true);
     try {
       fetchUser(props.userInfo.cardID);
@@ -76,20 +77,11 @@ export default function UpdateUserForm(props) {
   // reikia padaryti update route back ende ir čia išsiuntimą į jį
   const handleSubmit = async () => {
     try {
-      const { data } = "banana";
+      console.log(window.localStorage.getItem("token"));
+      const { data } = await updateOneUser(values);
       setSeverity("success");
-      setError("Naujas vartotojas sukurtas!");
+      setError("Vartotojas atnaujintas!");
       setShowError(true);
-
-      props.setUsersList([
-        {
-          grade: values.grade,
-          cardID: values.cardID,
-          firstName: values.firstName,
-          lastName: values.lastName,
-        },
-        ...props.usersList,
-      ]);
       console.log(data);
     } catch (error) {
       console.log(error.response.data);
@@ -216,7 +208,7 @@ export default function UpdateUserForm(props) {
                 variant="contained"
                 sx={{ padding: 1, width: "50%", margin: "20px 0" }}
               >
-                Pridėti
+                Redaguoti
               </Button>
             </Grid>
           </Grid>

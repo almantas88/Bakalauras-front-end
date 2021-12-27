@@ -14,22 +14,27 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
-import InfoAboutUserBox from "./infoAboutUser";
-import DeleteUserConfirmation from "./deleteUserConfirmation";
-import UpdateUserForm from "./updateUserForm";
 import CircularProgress from "@mui/material/CircularProgress";
 import { UsersContext } from "../../context/usersContext";
+import Checkbox from "@mui/material/Checkbox";
+import InfoAboutBookBox from "../books/infoAboutBook";
+import DeleteBookConfirmation from "../books/deleteBookConfirmation"
 
 const columns = [
   {
-    id: "cardID",
-    label: "Kortelės ID",
+    id: "checkBox",
+    label: "Check",
     width: 50,
     minWidth: 50,
   },
-  { id: "firstName", label: "Vardas", width: 150, minWidth: 150 },
-  { id: "lastName", label: "Pavardė", width: 150, minWidth: 150 },
-  { id: "grade", label: "Klasė", width: 10, minWidth: 10 },
+  {
+    id: "bookID",
+    label: "Knygos ID",
+    width: 50,
+    minWidth: 50,
+  },
+  { id: "title", label: "Pavadinimas", width: 150, minWidth: 150 },
+  { id: "author", label: "Autorius", width: 150, minWidth: 150 },
   {
     id: "actions",
     label: "Veiksmai",
@@ -39,21 +44,27 @@ const columns = [
   },
 ];
 
-const UsersTable = forwardRef((props, ref) => {
-  const [allUserslist, setAllUsersList, handleDeleteUser] =
-    useContext(UsersContext);
+const BooksTable = forwardRef((props, ref) => {
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  const [showBookInfo, setshowBookInfo] = useState(false);
+  const [bookInfo, setBookInfo] = useState({
+    bookID: "",
+    title: "",
+    author: "",
+  });
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const [showUserInfo, setshowUserInfo] = useState(false);
-  const [showUpdateUserForm, setShowUpdateUserForm] = useState(false);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    id: "",
-    firstName: "",
-    lastName: "",
-  });
+  const handleShowBookInfo = (row) => {
+    setBookInfo({
+      bookID: row.bookID,
+      title: row.title,
+      author: row.author,
+    });
+    showBookInfo ? setshowBookInfo(false) : setshowBookInfo(true);
+  };
 
   useImperativeHandle(ref, () => ({
     setToFirstPage,
@@ -68,34 +79,16 @@ const UsersTable = forwardRef((props, ref) => {
     setPage(0);
   };
 
-  const handleShowUserInfo = (row) => {
-    setUserInfo({
-      cardID: row.cardID,
-      firstName: row.firstName,
-      lastName: row.lastName,
-    });
-    console.log(userInfo);
-    showUserInfo ? setshowUserInfo(false) : setshowUserInfo(true);
-  };
-
-  const handleShowUpdateUserForm = (row) => {
-    setUserInfo({
-      cardID: row.cardID,
-      firstName: row.firstName,
-      lastName: row.lastName,
-    });
-    showUpdateUserForm
-      ? setShowUpdateUserForm(false)
-      : setShowUpdateUserForm(true);
+  const setToFirstPage = () => {
+    setPage(0);
   };
 
   const handleShowDeleteConfirmation = (row) => {
-    setUserInfo({
-      cardID: row.cardID,
-      firstName: row.firstName,
-      lastName: row.lastName,
+    setBookInfo({
+      bookID: row.bookID,
+      title: row.title,
+      author: row.author,
     });
-    console.log(userInfo);
     showDeleteConfirmation
       ? setShowDeleteConfirmation(false)
       : setShowDeleteConfirmation(true);
@@ -105,14 +98,10 @@ const UsersTable = forwardRef((props, ref) => {
     setShowDeleteConfirmation(false);
   };
 
-  const setToFirstPage = () => {
-    setPage(0);
-  };
-
   return (
     <>
       {props.isLoading ? (
-        <CircularProgress sx={{ display: "flex", margin: "130px auto" }} />
+        <CircularProgress sx={{ display: "flex", margin: "150px auto" }} />
       ) : (
         <Paper className="userTable" sx={{ width: "95%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
@@ -148,17 +137,11 @@ const UsersTable = forwardRef((props, ref) => {
                               {column.id === "actions" ? (
                                 <>
                                   <Button
-                                    onClick={() => handleShowUserInfo(row)}
+                                    onClick={() => handleShowBookInfo(row)}
                                   >
                                     Informacija
                                   </Button>
-                                  <Button
-                                    onClick={() =>
-                                      handleShowUpdateUserForm(row)
-                                    }
-                                  >
-                                    Redaguoti
-                                  </Button>
+                                  <Button>Redaguoti</Button>
                                   <Button
                                     onClick={() =>
                                       handleShowDeleteConfirmation(row)
@@ -166,6 +149,10 @@ const UsersTable = forwardRef((props, ref) => {
                                   >
                                     Ištrinti
                                   </Button>
+                                </>
+                              ) : column.id === "checkBox" ? (
+                                <>
+                                  <Checkbox checked={row.checkBox} />
                                 </>
                               ) : column.format && typeof value === "number" ? (
                                 column.format(value)
@@ -192,29 +179,22 @@ const UsersTable = forwardRef((props, ref) => {
           />
         </Paper>
       )}
-      {showUserInfo ? (
-        <InfoAboutUserBox
-          userInfo={userInfo}
-          handleChange={handleShowUserInfo}
+      {showBookInfo ? (
+        <InfoAboutBookBox
+          bookInfo={bookInfo}
+          handleChange={handleShowBookInfo}
         />
       ) : null}
 
       {showDeleteConfirmation ? (
-        <DeleteUserConfirmation
-          userInfo={userInfo}
+        <DeleteBookConfirmation
+          bookInfo={bookInfo}
           handleChange={handleShowDeleteConfirmation}
           closeConfirmation={handleCloseDeleteConfirmation}
-        />
-      ) : null}
-
-      {showUpdateUserForm ? (
-        <UpdateUserForm
-          userInfo={userInfo}
-          handleChange={handleShowUpdateUserForm}
         />
       ) : null}
     </>
   );
 });
 
-export default memo(UsersTable);
+export default memo(BooksTable);

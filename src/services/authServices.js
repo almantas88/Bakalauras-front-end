@@ -5,7 +5,7 @@ const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 export async function login(data) {
 
     const response = await axios.post(`${apiUrl}/users/login`, data);
-    localStorage.setItem("token", response.data.token);
+    window.localStorage.setItem("token", response.data.token);
     return response;
 }
 
@@ -14,6 +14,6 @@ export function getCurrentUser() {
 }
 
 export function logout() {
-  localStorage.removeItem("token");
+  window.localStorage.removeItem("token");
   window.location = "/";
 }

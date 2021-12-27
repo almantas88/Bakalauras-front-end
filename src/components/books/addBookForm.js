@@ -4,10 +4,10 @@ import Container from "@mui/material/Container";
 import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { createNewUser } from "../../services/userServices";
+import { createNewBook } from "../../services/bookServices";
 import { MessageContext } from "../../context/messageContext";
 
-export default function AddUserForm(props) {
+export default function AddBookForm(props) {
   const [
     error,
     setError,
@@ -19,13 +19,10 @@ export default function AddUserForm(props) {
   ] = useContext(MessageContext);
 
   const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    cardID: "",
-    grade: "",
-    email: "",
-    password: "",
-    passwordCheck: "",
+    bookID: "",
+    title: "",
+    author: "",
+    description: "",
   });
 
   const handleInputChange = (e) => {
@@ -39,23 +36,26 @@ export default function AddUserForm(props) {
 
   const handleSubmit = async () => {
     try {
-      const { data } = await createNewUser(values);
+      const { data } = await createNewBook(values);
       setSeverity("success");
-      setError("Naujas vartotojas sukurtas!");
+      setError("Naujas knyga sukurta!");
       setShowError(true);
-
-      props.setUsersList([
-        {
-          grade: values.grade,
-          cardID: values.cardID,
-          firstName: values.firstName,
-          lastName: values.lastName,
-        },
-        ...props.usersList,
-      ]);
-      console.log(data);
+      try {
+        props.setBooksList([
+          {
+            bookID: values.bookID,
+            title: values.title,
+            author: values.author,
+            description: values.description,
+          },
+          ...props.booksList,
+        ]);
+      } catch (error) {
+        setSeverity("error");
+        setError("Ups... Kažkas nutiko negerai...");
+        setShowError(true);
+      }
     } catch (error) {
-      console.log(error.response.data);
       setSeverity("error");
       setError(error.response.data.msg);
       setShowError(true);
@@ -75,100 +75,63 @@ export default function AddUserForm(props) {
       >
         <Grid container spacing={2} justify="center">
           <Grid item xs={10}>
-            <h2>Pridėti vartotoją</h2>
+            <h2>Pridėti knygą</h2>
           </Grid>
           <Grid item xs={2} onClick={props.handleChange}>
             <CloseIcon sx={{ fontSize: 40, color: "#252525", padding: 1 }} />
           </Grid>
           <Grid item xs={12}>
-            <h3>Vaiko duomenys</h3>
+            <h3>Knygos duomenys</h3>
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="cardID"
-              value={values.cardID}
+              name="bookID"
+              value={values.bookID}
               onChange={handleInputChange}
               fullWidth
               required
               autoComplete="disabled"
-              label="Kortelės id"
+              label="Knygos id"
               variant="outlined"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
-              name="firstName"
-              value={values.firstName}
+              name="title"
+              value={values.title}
               onChange={handleInputChange}
               fullWidth
               required
               autoComplete="disabled"
-              label="Vardas"
+              label="Knygos pavadinimas"
               variant="outlined"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
-              name="lastName"
-              value={values.lastName}
+              name="author"
+              value={values.author}
               onChange={handleInputChange}
               fullWidth
               required
               autoComplete="disabled"
-              label="Pavardė"
+              label="Autorius"
               variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              name="grade"
-              value={values.grade}
-              onChange={handleInputChange}
-              fullWidth
-              required
-              autoComplete="disabled"
-              label="Klasė"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <h3>Vaiko prisijungimo duomenys</h3>
+            <h3>Knygos aprašymas</h3>
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="email"
-              value={values.email}
+              minRows={4}
+              multiline
+              maxRows={4}
+              name="description"
+              value={values.description}
               onChange={handleInputChange}
               fullWidth
-              required
-              autoComplete="disabled"
-              label="El. paštas"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              name="password"
-              value={values.password}
-              onChange={handleInputChange}
-              fullWidth
-              required
-              type="password"
-              autoComplete="disabled"
-              label="Slaptažodis"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              name="passwordCheck"
-              value={values.passwordCheck}
-              onChange={handleInputChange}
-              fullWidth
-              required
-              autoComplete="disabled"
-              type="password"
-              label="Pakartotas slaptažodis"
+              label="Aprašymas"
               variant="outlined"
             />
           </Grid>

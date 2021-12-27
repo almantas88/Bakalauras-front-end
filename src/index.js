@@ -3,12 +3,15 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { MessageProvider } from "./context/messageContext";
 import { UsersProvider } from "./context/usersContext";
+import { BooksProvider } from "./context/booksContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <MessageProvider>
       <UsersProvider>
-        <App />
+        <BooksProvider>
+          <App />
+        </BooksProvider>
       </UsersProvider>
     </MessageProvider>
   </React.StrictMode>,
