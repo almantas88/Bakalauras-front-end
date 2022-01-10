@@ -45,6 +45,8 @@ export default function Books() {
     setIsLoading(false);
   }
 
+  console.log("hi");
+
   return (
     <div>
       <MenuDrawer />
