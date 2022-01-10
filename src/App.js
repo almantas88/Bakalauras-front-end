@@ -6,29 +6,14 @@ import SignIn from "./pages/SignIn";
 import Users from "./pages/Users";
 import Books from "./pages/Books";
 import FlashMessage from "./components/flashMessage";
-import { MessageProvider, MessageContext } from "./context/messageContext";
+import { MessageContext } from "./context/messageContext";
 
 export default function App() {
-  const [
-    error,
-    setError,
-    showError,
-    setShowError,
-    severity,
-    setSeverity,
-    closeError,
-  ] = useContext(MessageContext);
-
   return (
 
      
       <Router>
-         <FlashMessage
-        msg={error}
-        showError={showError}
-        closeError={closeError}
-        severity={severity}
-      />
+         <FlashMessage/>
         <Routes>
           <Route path="/" element={<SignIn />} />
           <Route path="/users" element={<Users />} />

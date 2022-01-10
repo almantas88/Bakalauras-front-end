@@ -10,9 +10,11 @@ export const UsersProvider = (props) => {
     setAllUsersList(userListAfterDeletion);
   };
 
+  // cia padaryt update funkcija
+
   return (
     <UsersContext.Provider
-      value={[allUserslist, setAllUsersList, handleDeleteUserContext]}
+      value={{allUserslist, setAllUsersList, handleDeleteUserContext}}
     >
       {props.children}
     </UsersContext.Provider>

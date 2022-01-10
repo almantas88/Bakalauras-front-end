@@ -8,15 +8,8 @@ import { createNewUser } from "../../services/userServices";
 import { MessageContext } from "../../context/messageContext";
 
 export default function AddUserForm(props) {
-  const [
-    error,
-    setError,
-    showError,
-    setShowError,
-    severity,
-    setSeverity,
-    closeError,
-  ] = useContext(MessageContext);
+  const [message, severity, showMessageBox, handleMessageShow, closeError] =
+    useContext(MessageContext);
 
   const [values, setValues] = useState({
     firstName: "",
@@ -40,9 +33,7 @@ export default function AddUserForm(props) {
   const handleSubmit = async () => {
     try {
       const { data } = await createNewUser(values);
-      setSeverity("success");
-      setError("Naujas vartotojas sukurtas!");
-      setShowError(true);
+      handleMessageShow("Naujas vartotojas sukurtas!", "success");
 
       props.setUsersList([
         {
@@ -56,9 +47,7 @@ export default function AddUserForm(props) {
       console.log(data);
     } catch (error) {
       console.log(error.response.data);
-      setSeverity("error");
-      setError(error.response.data.msg);
-      setShowError(true);
+      handleMessageShow(error.response.data.msg, "error");
     }
   };
 

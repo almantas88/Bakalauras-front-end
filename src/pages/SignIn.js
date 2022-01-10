@@ -18,20 +18,8 @@ import { MessageContext } from "../context/messageContext";
 const theme = createTheme();
 
 export default function SignInSide() {
-  const [
-    error,
-    setError,
-    showError,
-    setShowError,
-    severity,
-    setSeverity,
-    closeError,
-  ] = useContext(MessageContext);
-
-  // const closeError = () => {
-  //   setError("");
-  //   setShowError(false);
-  // };
+  const [message, severity, showMessageBox, handleMessageShow, closeError] =
+    useContext(MessageContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -42,27 +30,18 @@ export default function SignInSide() {
   const doSubmit = async (email, password) => {
     try {
       await login({ email, password });
-      setSeverity("success");
-      setError("Pavyko prisijungti");
-      setShowError(true);
-      
+      handleMessageShow("Pavyko prisijungti", "success");
       setTimeout(() => {
-        setShowError(false);
-        setError("");
-
+        closeError();
         window.location = "/users";
       }, 500);
-      
     } catch (error) {
-      setSeverity("error");
-      setError(error.response.data.msg);
-      setShowError(true);
+      handleMessageShow(error.response.data.msg, "error");
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid

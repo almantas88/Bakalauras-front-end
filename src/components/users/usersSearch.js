@@ -81,7 +81,7 @@ const grades = [
 ];
 
 export default function UsersSearch(props) {
-  const [allUserslist, setAllUsersList, handleDeleteUser] =
+  const usersContext =
     useContext(UsersContext);
 
   const [allRowsForShowing, setAllRowsForShowing] = useState(props.usersList);
@@ -97,7 +97,7 @@ export default function UsersSearch(props) {
   const childRef = useRef();
 
   const handleSearchButton = () => {
-    var filteredRows = allUserslist;
+    var filteredRows = usersContext.allUserslist;
 
     filteredRows = filteredRows.filter((row) => {
       return row.cardID.toLowerCase().includes(searchTextCardId.toLowerCase());
@@ -131,7 +131,7 @@ export default function UsersSearch(props) {
     setSearchTextLastName("");
     setSearchTextCardId("");
     setGrade('');
-    setAllRowsForShowing(allUserslist);
+    setAllRowsForShowing(usersContext.allUserslist);
     childRef.current.setToFirstPage();
   };
 
@@ -148,9 +148,9 @@ export default function UsersSearch(props) {
   };
 
   useEffect(() => {
-    setAllUsersList(allUserslist);
-    setAllRowsForShowing(allUserslist);
-  }, [allUserslist]);
+    usersContext.setAllUsersList(usersContext.allUserslist);
+    setAllRowsForShowing(usersContext.allUserslist);
+  }, [usersContext.allUserslist]);
 
   return (
     <>
@@ -251,7 +251,7 @@ export default function UsersSearch(props) {
 
       <UsersTable
         ref={childRef}
-        allRows={allUserslist}
+        allRows={usersContext.allUserslist}
         allRowsForShowing={allRowsForShowing}
         handleShowUserInfo={props.handleChange}
         isLoading={props.isLoading}

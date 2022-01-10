@@ -24,11 +24,11 @@ export async function deleteBook(data) {
 }
 
 export async function getOneBook(data) {
-  const foundUser = await axios.post(`${apiUrl}/books/oneUser`, data);
-  return foundUser;
+  const foundBook = await axios.post(`${apiUrl}/books/oneBook`, data);
+  return foundBook;
 }
 
 export async function updateOneBook(data) {
-  const updatingUser = await axios.put(`${apiUrl}/books/updateUser`, data);
+  const updatingUser = await axios.put(`${apiUrl}/books/updateBook`, data);
   return updatingUser;
 }

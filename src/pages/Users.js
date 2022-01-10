@@ -8,7 +8,7 @@ import { getAllUsers } from "../services/userServices";
 import { UsersContext } from "../context/usersContext";
 
 export default function Users() {
-  const [allUserslist, setAllUsersList, handleDeleteUser] =
+  const usersContext =
     useContext(UsersContext);
 
   //const [usersList, setUsersList] = useState([]);
@@ -16,7 +16,7 @@ export default function Users() {
   const [showNewUserForm, setshowNewUserForm] = useState(false);
 
   useEffect(() => {
-    allUserslist <= 0 && returnAllUsers();
+    usersContext.allUserslist <= 0 && returnAllUsers();
     getRole();
   }, []);
 
@@ -37,7 +37,7 @@ export default function Users() {
     try {
       const { data } = await getAllUsers();
 
-      setAllUsersList(data.users);
+      usersContext.setAllUsersList(data.users);
     } catch (error) {
       console.log(error);
     }
@@ -60,12 +60,12 @@ export default function Users() {
       >
         Pridėti vartotoją
       </Button>
-      <UsersSearch usersList={allUserslist} isLoading={isLoading}></UsersSearch>
+      <UsersSearch usersList={usersContext.allUserslist} isLoading={isLoading}></UsersSearch>
       {showNewUserForm ? (
         <AddUserForm
           handleChange={handleShowUserAddForm}
-          setUsersList={setAllUsersList}
-          usersList={allUserslist}
+          setUsersList={usersContext.setAllUsersList}
+          usersList={usersContext.allUserslist}
         />
       ) : null}
     </div>

@@ -95,7 +95,7 @@ export default function AddBookForm(props) {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               name="title"
               value={values.title}
@@ -107,7 +107,7 @@ export default function AddBookForm(props) {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               name="author"
               value={values.author}

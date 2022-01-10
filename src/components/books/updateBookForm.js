@@ -5,23 +5,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { MessageContext } from "../../context/messageContext";
-import { getOneUser, updateOneUser } from "../../services/userServices";
+import { getOneBook, updateOneBook } from "../../services/bookServices";
 import CircularProgress from "@mui/material/CircularProgress";
 
-export default function UpdateUserForm(props) {
+export default function UpdateBookForm(props) {
   const [message, severity, showMessageBox, handleMessageShow, closeError] =
     useContext(MessageContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    cardID: "",
-    grade: "",
-    email: "",
-    password: "",
-    passwordCheck: "",
+    bookID: "",
+    title: "",
+    author: "",
+    description: "",
   });
 
   const handleInputChange = (e) => {
@@ -33,17 +30,14 @@ export default function UpdateUserForm(props) {
     });
   };
 
-  const fetchUser = async (cardID) => {
+  const fetchBook = async (bookID) => {
     try {
-      const { data } = await getOneUser({cardID});
+      const { data } = await getOneBook({ bookID });
       setValues({
-        firstName: data.user.firstName,
-        lastName: data.user.lastName,
-        cardID: data.user.cardID,
-        grade: data.user.grade,
-        email: data.user.email,
-        password: "",
-        passwordCheck: "",
+        bookID: data.book.bookID,
+        title: data.book.title,
+        author: data.book.author,
+        description: data.book.description,
       });
     } catch (error) {
       handleMessageShow(error.response.data.msg, "error");
@@ -51,23 +45,22 @@ export default function UpdateUserForm(props) {
   };
 
   useEffect(() => {
-    console.log(window.localStorage.getItem("token"));
     setIsLoading(true);
+
     try {
-      fetchUser(props.userInfo.cardID);
+      fetchBook(props.bookInfo.bookID);
     } catch (error) {
       handleMessageShow(error.response.data.msg, "error");
     }
     setIsLoading(false);
   }, []);
 
-
-  // darbai ateičiai : 
+  // darbai ateičiai :
   // reikia padaryti update route back ende ir čia išsiuntimą į jį
   const handleSubmit = async () => {
     try {
-      const { data } = await updateOneUser(values);    
-      handleMessageShow("Vartotojas atnaujintas!", "success");
+      const { data } = await updateOneBook(values);
+      handleMessageShow("Knyga atnaujinta!", "success");
     } catch (error) {
       console.log(error.response.data);
       handleMessageShow(error.response.data.msg, "error");
@@ -86,104 +79,71 @@ export default function UpdateUserForm(props) {
         }}
       >
         {isLoading ? (
-          <CircularProgress sx={{ display: "flex", margin: "auto", padding: 15 }} />
+          <CircularProgress
+            sx={{ display: "flex", margin: "auto", padding: 15 }}
+          />
         ) : (
           <Grid container spacing={2} justify="center">
             <Grid item xs={10}>
-              <h2>Atnaujinti vartotoją</h2>
+              <h2>Atnaujinti knyga</h2>
             </Grid>
             <Grid item xs={2} onClick={props.handleChange}>
               <CloseIcon sx={{ fontSize: 40, color: "#252525", padding: 1 }} />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="cardID"
-                value={values.cardID}
+                name="bookID"
+                disabled
+                value={values.bookID}
                 onChange={handleInputChange}
                 fullWidth
                 required
                 autoComplete="disabled"
-                label="Kortelės id"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
-                fullWidth
-                required
-                autoComplete="disabled"
-                label="Vardas"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                name="lastName"
-                value={values.lastName}
-                onChange={handleInputChange}
-                fullWidth
-                required
-                autoComplete="disabled"
-                label="Pavardė"
+                label="Knygos id"
                 variant="outlined"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="grade"
-                value={values.grade}
+                name="title"
+                value={values.title}
                 onChange={handleInputChange}
                 fullWidth
                 required
                 autoComplete="disabled"
-                label="Klasė"
+                label="Knygos pavadinimas"
                 variant="outlined"
               />
             </Grid>
             <Grid item xs={12}>
-              <h3>Vaiko prisijungimo duomenys</h3>
+              <TextField
+                name="author"
+                value={values.author}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                autoComplete="disabled"
+                label="Autorius"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <h3>Knygos aprašymas</h3>
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name="email"
-                value={values.email}
+                minRows={4}
+                multiline
+                maxRows={4}
+                name="description"
+                value={values.description}
                 onChange={handleInputChange}
                 fullWidth
-                required
-                autoComplete="disabled"
-                label="El. paštas"
+                label="Aprašymas"
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                name="password"
-                value={values.password}
-                onChange={handleInputChange}
-                fullWidth
-                required
-                type="password"
-                autoComplete="disabled"
-                label="Slaptažodis"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                name="passwordCheck"
-                value={values.passwordCheck}
-                onChange={handleInputChange}
-                fullWidth
-                required
-                autoComplete="disabled"
-                type="password"
-                label="Pakartotas slaptažodis"
-                variant="outlined"
-              />
-            </Grid>
+
             <Grid align="center" item xs={12}>
               <Button
                 onClick={handleSubmit}

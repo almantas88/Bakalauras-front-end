@@ -10,29 +10,17 @@ export default function DeleteBook(props) {
   const [allBooksList, setAllBooksList, handleDeleteBookContext] =
     useContext(BooksContext);
 
-  const [
-    error,
-    setError,
-    showError,
-    setShowError,
-    severity,
-    setSeverity,
-    closeError,
-  ] = useContext(MessageContext);
+    const [message, severity, showMessageBox, handleMessageShow, closeError] =
+    useContext(MessageContext);
 
-  const handleDeleteUser = async () => {
+  const handleDeleteBook = async () => {
     try {
       const { data } = await deleteBook({bookID: props.bookInfo.bookID});
       handleDeleteBookContext(props.bookInfo.bookID);
-      setSeverity("success");
-      setError("Knyga buvo sėkmingai panaikinta!");
-      setShowError(true);
+      handleMessageShow("Knyga buvo sėkmingai panaikinta!", "success");
       props.closeConfirmation();
     } catch (error) {
-      console.log(error.response.data);
-      setSeverity("error");
-      setError(error.response.data.msg);
-      setShowError(true);
+      handleMessageShow(error.response.data.msg, "error");
     }
   };
 
@@ -67,7 +55,7 @@ export default function DeleteBook(props) {
               size="large"
               color="error"
               variant="contained"
-              onClick={handleDeleteUser}
+              onClick={handleDeleteBook}
             >
               Ištrinti
             </Button>

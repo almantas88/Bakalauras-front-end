@@ -18,7 +18,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { UsersContext } from "../../context/usersContext";
 import Checkbox from "@mui/material/Checkbox";
 import InfoAboutBookBox from "../books/infoAboutBook";
-import DeleteBookConfirmation from "../books/deleteBookConfirmation"
+import DeleteBookConfirmation from "../books/deleteBookConfirmation";
+import UpdateBookForm from '../books/updateBookForm';
 
 const columns = [
   {
@@ -46,6 +47,7 @@ const columns = [
 
 const BooksTable = forwardRef((props, ref) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showUpdateBookForm, setShowUpdateBookForm] = useState(false);
 
   const [showBookInfo, setshowBookInfo] = useState(false);
   const [bookInfo, setBookInfo] = useState({
@@ -98,13 +100,24 @@ const BooksTable = forwardRef((props, ref) => {
     setShowDeleteConfirmation(false);
   };
 
+  const handleShowUpdateBookForm = (row) => {
+    setBookInfo({
+      bookID: row.bookID,
+      title: row.title,
+      author: row.author,
+    });
+    showUpdateBookForm
+      ? setShowUpdateBookForm(false)
+      : setShowUpdateBookForm(true);
+  };
+
   return (
     <>
       {props.isLoading ? (
         <CircularProgress sx={{ display: "flex", margin: "150px auto" }} />
       ) : (
         <Paper className="userTable" sx={{ width: "95%", overflow: "hidden" }}>
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: 430 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -141,7 +154,9 @@ const BooksTable = forwardRef((props, ref) => {
                                   >
                                     Informacija
                                   </Button>
-                                  <Button>Redaguoti</Button>
+                                  <Button onClick={() =>
+                                      handleShowUpdateBookForm(row)
+                                    }>Redaguoti</Button>
                                   <Button
                                     onClick={() =>
                                       handleShowDeleteConfirmation(row)
@@ -191,6 +206,13 @@ const BooksTable = forwardRef((props, ref) => {
           bookInfo={bookInfo}
           handleChange={handleShowDeleteConfirmation}
           closeConfirmation={handleCloseDeleteConfirmation}
+        />
+      ) : null}
+
+      {showUpdateBookForm ? (
+        <UpdateBookForm
+          bookInfo={bookInfo}
+          handleChange={handleShowUpdateBookForm}
         />
       ) : null}
     </>
