@@ -9,9 +9,22 @@ export const BooksProvider = (props) => {
     setAllBooksList(bookListAfterDeletion);
   };
 
+  const handleUpdateBookContext = (bookID, values) => {
+    const bookListAfterUpdate = allBooksList.filter((element) =>  element.bookID !== bookID   )
+    setAllBooksList([
+      {
+        bookID: values.bookID,
+        title: values.title,
+        author: values.author,
+        description: values.description,
+      },
+      ...bookListAfterUpdate,
+    ]);
+  };
+
   return (
     <BooksContext.Provider
-      value={[allBooksList, setAllBooksList, handleDeleteBookContext]}
+      value={{allBooksList, setAllBooksList, handleDeleteBookContext, handleUpdateBookContext}}
     >
       {props.children}
     </BooksContext.Provider>

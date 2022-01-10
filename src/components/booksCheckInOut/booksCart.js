@@ -40,8 +40,6 @@ const columns = [
 ];
 
 const BooksTable = forwardRef((props, ref) => {
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [showUpdateBookForm, setShowUpdateBookForm] = useState(false);
 
   const [showBookInfo, setshowBookInfo] = useState(false);
   const [bookInfo, setBookInfo] = useState({
@@ -79,39 +77,14 @@ const BooksTable = forwardRef((props, ref) => {
     setPage(0);
   };
 
-  const handleShowDeleteConfirmation = (row) => {
-    setBookInfo({
-      bookID: row.bookID,
-      title: row.title,
-      author: row.author,
-    });
-    showDeleteConfirmation
-      ? setShowDeleteConfirmation(false)
-      : setShowDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setShowDeleteConfirmation(false);
-  };
-
-  const handleShowUpdateBookForm = (row) => {
-    setBookInfo({
-      bookID: row.bookID,
-      title: row.title,
-      author: row.author,
-    });
-    showUpdateBookForm
-      ? setShowUpdateBookForm(false)
-      : setShowUpdateBookForm(true);
-  };
 
   return (
     <>
       {props.isLoading ? (
-        <CircularProgress sx={{ display: "flex", margin: "150px auto" }} />
+        <CircularProgress sx={{ display: "flex", margin: "100px auto" }} />
       ) : (
-        <Paper className="userTable" sx={{ width: "95%", overflow: "hidden" }}>
-          <TableContainer sx={{ maxHeight: 430 }}>
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 400}}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -148,15 +121,13 @@ const BooksTable = forwardRef((props, ref) => {
                                   >
                                     Informacija
                                   </Button>
-                                  <Button onClick={() =>
-                                      handleShowUpdateBookForm(row)
-                                    }>Redaguoti</Button>
+                            
                                   <Button
                                     onClick={() =>
-                                      handleShowDeleteConfirmation(row)
+                                      alert("clicked")
                                     }
                                   >
-                                    Ištrinti
+                                    Pirdėti
                                   </Button>
                                 </>
                               
@@ -192,20 +163,6 @@ const BooksTable = forwardRef((props, ref) => {
         />
       ) : null}
 
-      {showDeleteConfirmation ? (
-        <DeleteBookConfirmation
-          bookInfo={bookInfo}
-          handleChange={handleShowDeleteConfirmation}
-          closeConfirmation={handleCloseDeleteConfirmation}
-        />
-      ) : null}
-
-      {showUpdateBookForm ? (
-        <UpdateBookForm
-          bookInfo={bookInfo}
-          handleChange={handleShowUpdateBookForm}
-        />
-      ) : null}
     </>
   );
 });

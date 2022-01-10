@@ -6,15 +6,13 @@ import Grid from "@mui/material/Grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SearchIcon from "@mui/icons-material/Search";
 import { BooksContext } from "../../context/booksContext";
-import BooksTable from "./booksTable";
-
+import BooksTable from "./booksCheckOutTable";
+import BooksCart from "./booksCart";
 
 export default function BookSearch(props) {
   const booksContext = useContext(BooksContext);
 
-  const [allRowsForShowing, setAllRowsForShowing] = useState(
-    props.booksList
-  );
+  const [allRowsForShowing, setAllRowsForShowing] = useState(props.booksList);
 
   const [searchTextBookId, setSearchTextBookId] = useState("");
   const [searchTextTitle, setSearchTextTitle] = useState("");
@@ -30,17 +28,12 @@ export default function BookSearch(props) {
     });
 
     filteredRows = filteredRows.filter((row) => {
-      return row.author
-        .toLowerCase()
-        .includes(searchTextAuthor.toLowerCase());
+      return row.author.toLowerCase().includes(searchTextAuthor.toLowerCase());
     });
 
     filteredRows = filteredRows.filter((row) => {
-      return row.title
-        .toLowerCase()
-        .includes(searchTextBookId.toLowerCase());
+      return row.title.toLowerCase().includes(searchTextBookId.toLowerCase());
     });
-
 
     console.log(filteredRows);
     setAllRowsForShowing(filteredRows);
@@ -76,8 +69,8 @@ export default function BookSearch(props) {
     <>
       <Container sx={{ overflow: "hidden", width: "95%" }}>
         <h2>Paieška:</h2>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
+        <Grid container spacing={1}>
+          <Grid item xs={2.5}>
             <TextField
               fullWidth
               value={searchTextTitle}
@@ -89,7 +82,7 @@ export default function BookSearch(props) {
               autoComplete="disabled"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={2.5}>
             <TextField
               fullWidth
               value={searchTextBookId}
@@ -101,7 +94,7 @@ export default function BookSearch(props) {
               autoComplete="disabled"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={2.5}>
             <TextField
               fullWidth
               value={searchTextAuthor}
@@ -113,31 +106,8 @@ export default function BookSearch(props) {
               autoComplete="disabled"
             />
           </Grid>
-          {/* <Grid item xs={3}>
-            <TextField
-              fullWidth
-              id="outlined-select-currency"
-              select
-              inputProps={{ MenuProps: { disableScrollLock: true } }}
-              label="Klasė"
-              value={grade}
-              onChange={handleChange}
-            >
-              {grades.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid> */}
-        </Grid>
-        <Grid
-          container
-          spacing={2}
-          justifyContent="flex-end"
-          sx={{ marginTop: 1 }}
-        >
-          <Grid alignItems={"right"} item xs={3}>
+
+          <Grid item xs={2}>
             <Button
               sx={{
                 height: "100%",
@@ -155,7 +125,7 @@ export default function BookSearch(props) {
             </Button>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Button
               sx={{
                 height: "100%",
@@ -174,13 +144,39 @@ export default function BookSearch(props) {
         </Grid>
       </Container>
 
-      <BooksTable
-        ref={childRef}
-        allRows={booksContext.allBooksList}
-        allRowsForShowing={allRowsForShowing}
-        handleShowUserInfo={props.handleChange}
-        isLoading={props.isLoading}
-      />
+      <Container maxWidth="fixed" sx={{ overflow: "hidden", width: "100%" }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={12} lg={6}>
+            <h2>Knygos:</h2>
+            <BooksTable
+              ref={childRef}
+              allRows={booksContext.allBooksList}
+              allRowsForShowing={allRowsForShowing}
+              handleShowUserInfo={props.handleChange}
+              isLoading={props.isLoading}
+            />
+          </Grid>
+          <Grid item xs={12} md={12} lg={6}>
+            <h2>Krepšelis:</h2>
+            <BooksCart
+              ref={childRef}
+              allRows={booksContext.allBooksList}
+              allRowsForShowing={allRowsForShowing}
+              handleShowUserInfo={props.handleChange}
+              isLoading={props.isLoading}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+        sx= {{margin: "20px 0px"}}
+          container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <Button size="large" variant="contained">Išduoti knygas</Button>
+        </Grid>
+      </Container>
     </>
   );
 }

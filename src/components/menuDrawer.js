@@ -78,7 +78,7 @@ export default function TemporaryDrawer() {
           </ListItem>
         </Link>
 
-        <Link className="link" to="/books">
+        <Link className="link" to="/bookscheckincheckout">
           <ListItem button key={"Knygų išdavimas"}>
             <ListItemIcon>
               <AutoStoriesIcon />

@@ -12,9 +12,22 @@ export const UsersProvider = (props) => {
 
   // cia padaryt update funkcija
 
+  const handleUpdateUserContext = (cardID, values) => {
+    const userListAfterUpdate = allUserslist.filter((element) =>  element.cardID !== cardID   )
+    setAllUsersList([
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        cardID: values.cardID,
+        grade: values.grade,
+      },
+      ...userListAfterUpdate,
+    ]);
+  };
+
   return (
     <UsersContext.Provider
-      value={{allUserslist, setAllUsersList, handleDeleteUserContext}}
+      value={{allUserslist, setAllUsersList, handleDeleteUserContext, handleUpdateUserContext}}
     >
       {props.children}
     </UsersContext.Provider>

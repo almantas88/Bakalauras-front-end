@@ -7,10 +7,13 @@ import Button from "@mui/material/Button";
 import { MessageContext } from "../../context/messageContext";
 import { getOneBook, updateOneBook } from "../../services/bookServices";
 import CircularProgress from "@mui/material/CircularProgress";
+import { BooksContext } from "../../context/booksContext";
 
 export default function UpdateBookForm(props) {
   const [message, severity, showMessageBox, handleMessageShow, closeError] =
     useContext(MessageContext);
+
+    const booksContext = useContext(BooksContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,6 +63,7 @@ export default function UpdateBookForm(props) {
   const handleSubmit = async () => {
     try {
       const { data } = await updateOneBook(values);
+      booksContext.handleUpdateBookContext(values.bookID, values);
       handleMessageShow("Knyga atnaujinta!", "success");
     } catch (error) {
       console.log(error.response.data);

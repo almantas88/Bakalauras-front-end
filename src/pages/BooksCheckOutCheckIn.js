@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import MenuDrawer from "../components/menuDrawer";
 import { Button } from "@mui/material";
-import BookSearch from "../components/books/bookSearch";
+import BookSearch from "../components/booksCheckInOut/bookSearchCheckInOut";
 import { BooksContext } from "../context/booksContext";
 import { getCurrentUser } from "../services/authServices";
 import AddBookForm from "../components/books/addBookForm";
@@ -10,17 +10,15 @@ import {getAllBooks} from '../services/bookServices'
 export default function Books() {
   const booksContext = useContext(BooksContext);
 
-  const [showNewBookForm, setshowNewBookForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleShowUserAddForm = () => {
-    showNewBookForm ? setshowNewBookForm(false) : setshowNewBookForm(true);
-  };
+
 
   useEffect(() => {
+    getRole();
     booksContext.allBooksList <= 0 && returnAllBooks();
     console.log(booksContext.allBooksList);
-    getRole();
+    
   }, []);
 
   async function getRole() {
@@ -50,22 +48,10 @@ export default function Books() {
   return (
     <div>
       <MenuDrawer />
-      <h1 className="centerHeader">Knygos</h1>
-      <Button
-        onClick={handleShowUserAddForm}
-        className="addUser-btn"
-        variant="contained"
-      >
-        Pridėti knygą
-      </Button>
+      <h1 className="centerHeader">Knygų išdavmas/gražinimas</h1>
+      
       <BookSearch booksList={booksContext.allBooksList} isLoading={isLoading}></BookSearch>
-      {showNewBookForm ? (
-        <AddBookForm
-          handleChange={handleShowUserAddForm}
-          setBooksList={booksContext.setAllBooksList}
-          booksList={booksContext.allBooksList}
-        />
-      ) : null}
+      
     </div>
   );
 }

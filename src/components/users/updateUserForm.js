@@ -7,10 +7,14 @@ import Button from "@mui/material/Button";
 import { MessageContext } from "../../context/messageContext";
 import { getOneUser, updateOneUser } from "../../services/userServices";
 import CircularProgress from "@mui/material/CircularProgress";
+import { UsersContext } from "../../context/usersContext";
 
 export default function UpdateUserForm(props) {
   const [message, severity, showMessageBox, handleMessageShow, closeError] =
     useContext(MessageContext);
+
+    const usersContext =
+    useContext(UsersContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -67,6 +71,7 @@ export default function UpdateUserForm(props) {
   const handleSubmit = async () => {
     try {
       const { data } = await updateOneUser(values);    
+      usersContext.handleUpdateUserContext(values.cardID, values);
       handleMessageShow("Vartotojas atnaujintas!", "success");
     } catch (error) {
       console.log(error.response.data);
@@ -102,6 +107,7 @@ export default function UpdateUserForm(props) {
                 onChange={handleInputChange}
                 fullWidth
                 required
+                disabled
                 autoComplete="disabled"
                 label="Kortelės id"
                 variant="outlined"
